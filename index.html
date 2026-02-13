@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Flash USDT • express buy</title>
+    <!-- Font & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(165deg, #0a0d12 0%, #1a1f28 100%);
+            color: #f0f4ff;
+            min-height: 100vh;
+            padding: 20px 16px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .wrapper {
+            max-width: 480px;
+            width: 100%;
+        }
+        /* header & brand */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .brand i {
+            font-size: 36px;
+            color: #ffe180;
+            text-shadow: 0 0 10px #ffb300;
+        }
+        .web-name {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffe180, #ffae42);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tagline {
+            font-size: 15px;
+            color: #c6d3f0;
+            margin-bottom: 24px;
+            padding-left: 8px;
+            border-left: 5px solid #ffae42;
+            line-height: 1.5;
+            background: rgba(10,20,30,0.3);
+            padding: 10px 12px;
+            border-radius: 12px;
+            backdrop-filter: blur(2px);
+        }
+        .buy-now-btn {
+            background: radial-gradient(circle at 30% 20%, #ffae42, #e5891a);
+            border: none;
+            padding: 16px 24px;
+            width: 100%;
+            border-radius: 50px;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 12px 20px rgba(255, 140, 0, 0.4);
+            margin-bottom: 36px;
+            border: 1px solid #ffeaa5;
+            transition: 0.1s;
+        }
+        .buy-now-btn span {
+            background: rgba(0,0,0,0.2);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 16px;
+        }
+        /* cards */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .offer-card {
+            background: rgba(20, 28, 40, 0.95);
+            backdrop-filter: blur(5px);
+            border-radius: 28px;
+            padding: 22px 20px;
+            border: 1px solid rgba(255, 200, 100, 0.25);
+            box-shadow: 0 10px 0 #0a0c10;
+            transition: all 0.12s;
+            cursor: pointer;
+            position: relative;
+        }
+        .offer-card.active {
+            border: 2.5px solid #ffb347;
+            background: rgba(35, 48, 63, 1);
+            box-shadow: 0 0 0 4px rgba(255, 180, 60, 0.2);
+            transform: scale(1.01);
+        }
+        .badge-flash {
+            background: #f7941e;
+            color: black;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+        }
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+        .pay-amount {
+            font-size: 30px;
+            font-weight: 800;
+            color: white;
+        }
+        .pay-amount small {
+            font-size: 17px;
+            font-weight: 500;
+            color: #bfd3ff;
+        }
+        .receive-amount {
+            background: #1f2a39;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #d8f8b8;
+            border: 1px solid #6f9452;
+        }
+        .divider-light {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 16px 0 14px;
+        }
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 13.5px;
+            color: #d3defa;
+        }
+        .feature-item {
+            flex: 1 1 100%;
+        }
+        .not-binance {
+            background: rgba(255, 100, 100, 0.18);
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid #ff8a8a;
+            color: #ffc8c8;
+        }
+
+        /* ===== UPDATED FRIENDLY PAYMENT SECTION ===== */
+        .form-container {
+            background: #0f151f;
+            border-radius: 36px 36px 24px 24px;
+            padding: 28px 20px;
+            margin-top: 12px;
+            border: 1px solid #4a5568;
+            box-shadow: inset 0 -2px 0 #080b0e;
+            transition: 0.2s;
+        }
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 26px;
+        }
+        /* MY (YOUR) TRC20 ADDRESS prominently displayed — now user-friendly */
+        .merchant-deposit-box {
+            background: #17212b;
+            border-radius: 28px;
+            padding: 22px 18px;
+            margin-bottom: 26px;
+            border-left: 8px solid #ffae42;
+            border-right: 1px solid #506280;
+            box-shadow: 0 6px 0 #0b0e12;
+        }
+        .label-icon {
+            font-size: 13px;
+            color: #b6caf0;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .trc-address-box {
+            background: #0a0f16;
+            padding: 16px 18px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 17px;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ffb045;
+            margin: 12px 0 8px;
+            color: #ffe28c;
+            font-weight: 600;
+        }
+        .copy-btn {
+            background: #2a384b;
+            padding: 10px 16px;
+            border-radius: 40px;
+            color: #ffd966;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .copy-btn i {
+            font-size: 16px;
+        }
+        .copy-btn:active {
+            background: #3e5068;
+        }
+        .info-note-friendly {
+            background: #1d2a36;
+            padding: 12px 16px;
+            border-radius: 18px;
+            color: #ffdcaa;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .input-field {
+            margin-bottom: 22px;
+        }
+        .input-field label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e4ebff;
+        }
+        .input-field input {
+            width: 100%;
+            background: #0d121b;
+            border: 1.5px solid #314153;
+            padding: 16px 20px;
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: 0.15s;
+        }
+        .input-field input:focus {
+            border-color: #ffae42;
+            background: #0a0e16;
+        }
+        .input-field input[readonly] {
+            background: #1a212c;
+            color: #dddddd;
+            font-weight: 600;
+        }
+
+        /* ----- NEW: ORDER PROCESS & STATUS (easy friendly) ----- */
+        .order-status-area {
+            background: #0f1a22;
+            border-radius: 40px;
+            margin-top: 28px;
+            padding: 6px;
+            border: 1px solid #566b81;
+        }
+        .status-banner {
+            background: #1f2e3b;
+            border-radius: 34px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .status-banner i {
+            font-size: 28px;
+            color: #ffd966;
+        }
+        .progress-steps {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .step {
+            background: #2e4255;
+            padding: 6px 12px;
+            border-radius: 60px;
+            font-size: 12px;
+            color: #cddcec;
+        }
+        .step.active-step {
+            background: #ffae42;
+            color: black;
+            font-weight: 700;
+        }
+        .submit-btn {
+            background: #2e7d32;
+            width: 100%;
+            border: none;
+            padding: 20px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            border-bottom: 5px solid #1a4a1a;
+            transition: 0.08s;
+            cursor: pointer;
+        }
+        .submit-btn i {
+            font-size: 22px;
+        }
+        .submit-btn:active {
+            border-bottom-width: 2px;
+            transform: translateY(3px);
+        }
+        .secure-footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #8899bb;
+            font-size: 13px;
+        }
+        .toast-message {
+            background: #1e332a;
+            border-radius: 60px;
+            padding: 14px 22px;
+            color: #caf0b5;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 12px;
+            border-left: 8px solid #86c43f;
+        }
+        .highlight {
+            color: #ffd966;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- ===== WEB NAME & DETAILS ===== -->
+    <div class="brand">
+        <i class="fas fa-bolt"></i>
+        <span class="web-name">FLASH USDT•BUY</span>
+    </div>
+    <div class="tagline">
+        <i class="fas fa-circle-check" style="color: #ffb347;"></i> 
+        Trusted flash USDT • transferable • expire 90d • all gambling & cotx • not binance
+    </div>
+    
+    <div class="buy-now-btn">
+        <span><i class="fas fa-bolt" style="margin-right: 8px;"></i> BUY FLASH NOW</span>
+        <i class="fas fa-arrow-right"></i>
+    </div>
+
+    <!-- ===== 4 OFFER CARDS ===== -->
+    <div class="section-title">
+        <i class="fas fa-gem" style="color: #ffb342;"></i> choose flash pack
+    </div>
+    <div class="card-grid" id="offerCardContainer">
+        <!-- CARD 1 : 20 USDT -> 150 flash -->
+        <div class="offer-card" data-plan="20" data-receive="150" data-detail="✅ every exchange • expire 90d • transferable • not binance">
+            <span class="badge-flash"><i class="fas fa-bolt"></i> FLASH 20</span>
+            <div class="price-row">
+                <span class="pay-amount">20 <small>USDT</small></span>
+                <span class="receive-amount">+150 FLASH</span>
+            </div>
+            <div class="divider-light"></div>
+            <div class="features-list">
+                <span class="feature-item"><i class="fas fa-check-circle"></i> Transferable, expire 90 days</span>
+                <span class="feature-item"><i class="fas fa-globe"></i> Every exchange works</span>
+                <span class="feature-item not-binance"><i class="fas fa-ban"></i> Not Binance tradable</span>
+                <span class="feature-item"><i class="fas fa-dice"></i> Gambling OK</span>
+            </div>
+        </div>
+        <!-- CARD 2 : 50 USDT -> 400 flash (gambling focus) -->
+        <div class="offer-card" data-plan="50" data-receive="400" data-detail="✅ 1xbit, aviator, cotx • all gambling • 90d • not binance • cotx trading">
+            <span class="badge-flash" style="background: #b85b1a;"><i class="fas fa-dragon"></i> GAMBLER</span>
+            <div class="price-row">
+                <span class="pay-amount">50 <small>USDT</small></span>
+                <span class="receive-amount">+400 FLASH</span>
+            </div>
+            <div class="divider-light"></div>
+            <div class="features-list">
+                <span class="feature-item"><i class="fas fa-check-circle"></i> Transferable, 90d expiry</span>
+                <span class="feature-item"><i class="fas fa-dice"></i> 1xbit, Aviator, Cotx</span>
+                <span class="feature-item"><i class="fas fa-casino"></i> All gambling sites</span>
+                <span class="feature-item not-binance"><i class="fas fa-exclamation-triangle"></i> Not Binance</span>
+                <span class="feature-item"><i class="fas fa-chart-line"></i> cotx trading ready</span>
+            </div>
+        </div>
+        <!-- CARD 3 : 100 USDT -> 1000 flash -->
+        <div class="offer-card" data-plan="100" data-receive="1000" data-detail="✅ all gambling + cotex trading • 90d transfer • not binance">
+            <span class="badge-flash" style="background: #b38633;"><i class="fas fa-crown"></i> PREMIUM</span>
+            <div class="price-row">
+                <span class="pay-amount">100 <small>USDT</small></span>
+                <span class="receive-amount">+1000 FLASH</span>
+            </div>
+            <div class="divider-light"></div>
+            <div class="features-list">
+                <span class="feature-item"><i class="fas fa-check-circle"></i> Transferable • 90 days expire</span>
+                <span class="feature-item"><i class="fas fa-dice"></i> All gambling (aviator,1xbit)</span>
+                <span class="feature-item"><i class="fas fa-chart-simple"></i> Cotex trading</span>
+                <span class="feature-item not-binance"><i class="fas fa-ban"></i> Not Binance</span>
+            </div>
+        </div>
+        <!-- CARD 4 : 200 USDT -> 1800 flash -->
+        <div class="offer-card" data-plan="200" data-receive="1800" data-detail="✅ mega • all gambling • cotx • 90d • not binance">
+            <span class="badge-flash" style="background: #1f6d5a;"><i class="fas fa-gem"></i> MEGA FLASH</span>
+            <div class="price-row">
+                <span class="pay-amount">200 <small>USDT</small></span>
+                <span class="receive-amount">+1800 FLASH</span>
+            </div>
+            <div class="divider-light"></div>
+            <div class="features-list">
+                <span class="feature-item"><i class="fas fa-check-circle"></i> Transferable 90 days</span>
+                <span class="feature-item"><i class="fas fa-dice"></i> All gambling, 1xbit, aviator</span>
+                <span class="feature-item"><i class="fas fa-store"></i> Cotex trading</span>
+                <span class="feature-item not-binance"><i class="fas fa-ban"></i> Not Binance</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ORDER & PAYMENT SECTION — FRIENDLY + YOUR TRC20 ===== -->
+    <div class="form-container" id="orderFormSection">
+        <div class="form-header">
+            <i class="fas fa-file-signature" style="color: #ffb347;"></i> COMPLETE PAYMENT
+            <span style="margin-left: auto; background: #293544; padding: 6px 16px; border-radius: 40px; font-size: 15px; font-weight:600;" id="selectedPlanLabel">20 USDT</span>
+        </div>
+
+        <!-- ✅✅ MY TRC20 ADDRESS (YOUR WALLET) - now directly visible and easy to copy, as requested: TEAYWpqe43nHU5dd8XCPwjruERaZHZDRP3 -->
+        <div class="merchant-deposit-box">
+            <div class="label-icon">
+                <i class="fas fa-circle-up" style="color: #ffb347;"></i> STEP 1 – SEND USDT (TRC20) TO THIS ADDRESS
+            </div>
+            <div class="trc-address-box" id="merchantTrcContainer">
+                <span id="merchantTrcAddress" style="font-size: 17px; letter-spacing: 1px;">TEAYWpqe43nHU5dd8XCPwjruERaZHZDRP3</span>
+                <button class="copy-btn" id="fastCopyMerchantBtn" onclick="copyMerchantAddress()">
+                    <i class="fas fa-copy"></i> COPY
+                </button>
+            </div>
+            <div class="info-note-friendly">
+                <i class="fas fa-clock" style="color: #ffe08c;"></i> 
+                Send exact USDT amount. After payment, fill your TRC20 below. Flash USDT sent within 5-20min.
+            </div>
+        </div>
+
+        <!-- READ-ONLY FIELDS (based on selected card) -->
+        <div class="input-field">
+            <label><i class="fas fa-coins"></i> YOU PAY (USDT) – exact amount</label>
+            <input type="text" id="payAmountInput" value="20 USDT" readonly>
+        </div>
+        <div class="input-field">
+            <label><i class="fas fa-bolt"></i> YOU RECEIVE (FLASH USDT)</label>
+            <input type="text" id="receiveAmountInput" value="150 FLASH" readonly>
+        </div>
+        <div class="input-field">
+            <label><i class="fas fa-file-lines"></i> DETAILS / RESTRICTIONS</label>
+            <input type="text" id="detailsInput" value="✅ every exchange • expire 90d • transferable • not binance" readonly>
+        </div>
+        
+        <!-- USER'S OWN TRC20 ADDRESS FOR RECEIVING FLASH -->
+        <div class="input-field">
+            <label><i class="fas fa-wallet"></i> STEP 2 – YOUR TRC20 ADDRESS (receive flash)</label>
+            <input type="text" id="userTrcAddress" placeholder="example: TEAY... or TX..." value="">
+        </div>
+
+        <!-- ===== ORDER PROCESS & STATUS (makes more friendly) ===== -->
+        <div class="order-status-area" id="orderStatusPanel">
+            <div class="status-banner">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-circle-notch"></i>
+                    <span style="font-weight: 700;">ORDER STATUS:</span>
+                </div>
+                <div class="progress-steps">
+                    <span class="step" id="stepPending">⏳ Pending</span>
+                    <span class="step" id="stepPaid">💰 Paid</span>
+                    <span class="step" id="stepSent">✅ Sent</span>
+                </div>
+            </div>
+            <div id="liveStatusMessage" style="padding: 12px 16px; color: #bfe0ff; font-size: 14px;">
+                <i class="fas fa-info-circle"></i> Awaiting your payment & submission.
+            </div>
+        </div>
+
+        <!-- SUBMIT BUTTON – BIGGER, MORE ACTION -->
+        <button class="submit-btn" id="submitOrderBtn">
+            <i class="fas fa-check-circle"></i> ✔ SUBMIT & CONFIRM PAYMENT
+        </button>
+        
+        <!-- friendly toast will appear after submit -->
+        <div id="friendlyToast" style="display: none;" class="toast-message">
+            <i class="fas fa-party-horn"></i> Order processing! Flash USDT reserved.
+        </div>
+    </div>
+
+    <div class="secure-footer">
+        <i class="fas fa-shield"></i> TRC20 secured • 90d flash • instant delivery • 24/7
+    </div>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+
+        // ===== YOUR TRC20 ADDRESS (Merchant deposit) =====
+        const MERCHANT_TRC = "TEAYWpqe43nHU5dd8XCPwjruERaZHZDRP3";
+        
+        // global copy function for merchant address (easy)
+        window.copyMerchantAddress = function() {
+            navigator.clipboard.writeText(MERCHANT_TRC).then(() => {
+                alert("✅ Merchant TRC20 address copied:\n" + MERCHANT_TRC);
+                // also update live status
+                document.getElementById('liveStatusMessage').innerHTML = '<i class="fas fa-check-circle" style="color:#8bc34a;"></i> Address copied! Send USDT then fill form.';
+            }).catch(() => {
+                prompt("Manual copy (Ctrl+C):", MERCHANT_TRC);
+            });
+        };
+
+        // card details mapping
+        const cardDetails = {
+            20: { receive: "150", detail: "✅ 20 USDT → 150 FLASH • every exchange • expire 90d • transferable • not binance" },
+            50: { receive: "400", detail: "✅ 50 USDT → 400 FLASH • 1xbit, aviator, cotx • all gambling • not binance • cotx trading • 90d" },
+            100: { receive: "1000", detail: "✅ 100 USDT → 1000 FLASH • all gambling, cotex trading • transferable 90d • NOT binance" },
+            200: { receive: "1800", detail: "✅ 200 USDT → 1800 FLASH • mega • all gambling • cotex • 90d • not binance" }
+        };
+
+        // DOM elements
+        const offerCards = document.querySelectorAll('.offer-card');
+        const payInput = document.getElementById('payAmountInput');
+        const receiveInput = document.getElementById('receiveAmountInput');
+        const detailsInput = document.getElementById('detailsInput');
+        const selectedPlanLabel = document.getElementById('selectedPlanLabel');
+        const userTrcField = document.getElementById('userTrcAddress');
+        const liveStatusMsg = document.getElementById('liveStatusMessage');
+        const stepPending = document.getElementById('stepPending');
+        const stepPaid = document.getElementById('stepPaid');
+        const stepSent = document.getElementById('stepSent');
+        const toastDiv = document.getElementById('friendlyToast');
+
+        // Set first card active
+        function setActiveCard(card, plan) {
+            offerCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            const detail = cardDetails[plan];
+            if (detail) {
+                payInput.value = plan + ' USDT';
+                receiveInput.value = detail.receive + ' FLASH';
+                detailsInput.value = detail.detail;
+                selectedPlanLabel.innerText = plan + ' USDT';
+            }
+        }
+
+        // add click listeners
+        offerCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                const plan = this.dataset.plan;
+                if (plan) {
+                    setActiveCard(this, plan);
+                    // Update status hint
+                    liveStatusMsg.innerHTML = '<i class="fas fa-bolt"></i> Pack selected: ' + plan + ' USDT → ' + cardDetails[plan].receive + ' FLASH. Complete payment.';
+                }
+            });
+        });
+
+        // initialize first card (20 USDT)
+        if (offerCards.length > 0) {
+            setActiveCard(offerCards[0], '20');
+        }
+
+        // ----- SUBMIT ORDER (make it more interactive, proccess) -----
+        const submitBtn = document.getElementById('submitOrderBtn');
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const userAddr = userTrcField.value.trim();
+            if (!userAddr) {
+                alert("📥 Please enter YOUR TRC20 address to receive Flash USDT.");
+                return;
+            }
+            if (userAddr.length < 25) {
+                alert("❌ TRC20 address invalid – check length.");
+                return;
+            }
+
+            // get current plan
+            const activeCard = document.querySelector('.offer-card.active');
+            if (!activeCard) return;
+            const plan = activeCard.dataset.plan;
+            const receiveAmount = activeCard.dataset.receive;
+            
+            // show processing toast
+            toastDiv.style.display = 'block';
+            toastDiv.innerHTML = '<i class="fas fa-circle-check" style="margin-right: 8px;"></i> ORDER PROCESSED! Flash USDT reserved for you. Check status below.';
+            
+            // update status steps (friendly UI)
+            stepPending.style.background = "#4caf50";  // mark as done
+            stepPaid.style.background = "#ffb347";
+            stepPaid.style.color = "black";
+            liveStatusMsg.innerHTML = `<i class="fas fa-check-circle" style="color:#a5d6a5;"></i> Payment recorded (simulated). We are sending ${receiveAmount} FLASH to ${userAddr.substring(0,10)}... — wait 2-20min.`;
+            
+            // also show third step as active soon
+            stepSent.style.background = "#3a5668";
+            stepSent.style.color = "white";
+            
+            // full summary alert (friendly)
+            alert(`✅ FLASH USDT ORDER SUBMITTED\n━━━━━━━━━━━━━━━━━\n💸 YOU SENT: ${plan} USDT to:\n${MERCHANT_TRC}\n\n✨ YOU GET: ${receiveAmount} FLASH USDT\n📋 CONDITIONS: ${cardDetails[plan].detail}\n\n📤 SEND TO YOUR TRC20:\n${userAddr}\n━━━━━━━━━━━━━━━\n⏳ Delivery in progress. Transferable, 90d expiry.`);
+
+            // set the step paid active
+            setTimeout(() => {
+                stepSent.style.background = "#ffb347";
+                stepSent.style.color = "black";
+                liveStatusMsg.innerHTML = '<i class="fas fa-rocket" style="color:#ffe082;"></i> Flash USDT sent to your wallet! Check in 5-30min. ✅ 90d expiry.';
+            }, 1800);
+        });
+
+        // extra: easy copy from deposit box also via the dedicated button
+        const fastCopyBtn = document.getElementById('fastCopyMerchantBtn');
+        if (fastCopyBtn) {
+            fastCopyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.copyMerchantAddress();
+            });
+        }
+
+        // prefill merchant address in any case
+        document.getElementById('merchantTrcAddress').innerText = MERCHANT_TRC;
+
+        // additional friendliness: if user clicks on deposit box, copy
+        const trcContainer = document.getElementById('merchantTrcContainer');
+        trcContainer.addEventListener('dblclick', function() {
+            window.copyMerchantAddress();
+        });
+
+    })();
+</script>
+
+<!-- ensure copyMerchantAddress function is global -->
+<script>
+    window.copyMerchantAddress = function() {
+        const addr = "TEAYWpqe43nHU5dd8XCPwjruERaZHZDRP3";
+        navigator.clipboard.writeText(addr).then(() => {
+            alert("✅ Merchant TRC20 address copied:\n" + addr);
+            document.getElementById('liveStatusMessage').innerHTML = '<i class="fas fa-check-circle" style="color:#8bc34a;"></i> Address copied! Send USDT then complete form.';
+        }).catch(() => {
+            prompt("Manual copy:", addr);
+        });
+    };
+</script>
+
+</body>
+</html>
