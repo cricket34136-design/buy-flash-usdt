@@ -339,6 +339,14 @@
       margin: 40px 0 20px;
       color: #7b98b5;
     }
+    .footer-links a {
+      color: #7b98b5;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #ffae42;
+    }
 
     /* popup overlay (modern) */
     .popup-overlay {
@@ -404,14 +412,13 @@
   <!-- Sticky Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <div class="logo"><i class="fas fa-burst"></i><span>FLASH•USDT</span></div>
+      <div class="logo" onclick="location.href='index.html'"><i class="fas fa-burst"></i><span>FLASH•USDT</span></div>
       <div class="nav-links">
-        <a href="#home">Home</a>
-        <a href="#packs">Packs</a>
-        <a href="#how">How it works</a>
-        <a href="#faq">FAQ</a>
-        <a href="#reviews">Reviews</a>
-        
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
   </nav>
@@ -528,13 +535,14 @@
       <div class="review-card"><div class="stars">★★★★★</div><p>“Got 1800 flash, works on cotx”</p><span>— Carlos, Brazil</span></div>
     </div>
 
- 
-
     <!-- FOOTER -->
     <div class="footer-links">
-      <span>Terms</span><span>Privacy</span><span>Refund Policy</span>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="contact.html">Contact</a>
     </div>
-    <div style="text-align:center; padding:20px 0; color:#4b6379;">© 2025 Flash USDT • demo UI — not real exchange</div>
+    <div style="text-align:center; padding:20px 0; color:#4b6379;">© 2025 Flash USDT </div>
   </div>
 
   <!-- POPUP overlay (improved) -->
@@ -585,7 +593,7 @@
     (function() {
       const MERCHANT = "TEAYWpqe43nHU5dd8XCPwjruERaZHZDRP3";
       const overlay = document.getElementById('buyPopup');
-      const openBtn = document.getElementById('heroBuyBtn'); // also main cta
+      const openBtn = document.getElementById('heroBuyBtn');
       const closeBtn = document.getElementById('closePopupBtn');
       const popupPlanSpan = document.getElementById('popupSelectedPlan');
       const popupReceiveSpan = document.getElementById('popupSelectedReceive');
@@ -625,7 +633,6 @@
         popupUserAddr.value = '';
       }
       openBtn.addEventListener('click', openPopup);
-      document.getElementById('buyFlashMainCta')?.addEventListener('click', openPopup); // from original
 
       closeBtn.addEventListener('click', ()=>overlay.classList.remove('show'));
       overlay.addEventListener('click', e => { if(e.target===overlay) overlay.classList.remove('show'); });
@@ -696,7 +703,5 @@
       });
     })();
   </script>
-  <!-- ensure original main cta works -->
-  <div style="display:none;">placeholder for original button</div>
 </body>
 </html>
